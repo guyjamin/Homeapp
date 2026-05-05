@@ -58,48 +58,96 @@ export default function Dashboard() {
         <p className="text-muted-foreground">Track your savings progress across all projects</p>
       </div>
 
-      {/* Overall Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6 bg-card border-border">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Total Saved</p>
-              <p className="text-3xl font-bold text-primary">
-                KSh {formatCompactNumber(totalSaved)}
-              </p>
-            </div>
-            <div className="p-3 bg-primary/10 rounded-lg">
-              <Banknote className="text-primary" size={24} />
-            </div>
-          </div>
-        </Card>
+      {/* Per-Project Stat Cards */}
+      {projects.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          {projects.map((project) => {
+            const progress = project.target > 0 ? (project.saved / project.target) * 100 : 0
+            const remaining = Math.max(0, project.target - project.saved)
+            return (
+              <Card key={project.id} className="p-6 bg-card border-border">
+                {/* Project colour accent bar */}
+                <div
+                  className="h-1 w-full rounded-full mb-4"
+                  style={{ backgroundColor: project.color }}
+                />
+                <div className="flex items-center gap-2 mb-4">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: project.color }}
+                  />
+                  <p className="text-sm font-semibold text-foreground truncate">{project.name}</p>
+                </div>
 
-        <Card className="p-6 bg-card border-border">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Total Target</p>
-              <p className="text-3xl font-bold text-secondary">
-                KSh {formatCompactNumber(totalTarget)}
-              </p>
-            </div>
-            <div className="p-3 bg-secondary/10 rounded-lg">
-              <TrendingUp className="text-secondary" size={24} />
-            </div>
-          </div>
-        </Card>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Saved</span>
+                    <span className="text-xl font-bold text-primary">
+                      KSh {formatCompactNumber(project.saved)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Target</span>
+                    <span className="text-xl font-bold text-foreground">
+                      KSh {formatCompactNumber(project.target)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Remaining</span>
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      KSh {formatCompactNumber(remaining)}
+                    </span>
+                  </div>
 
-        <Card className="p-6 bg-card border-border">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Overall Progress</p>
-              <p className="text-3xl font-bold text-accent">{overallProgress.toFixed(0)}%</p>
+                  {/* Progress bar */}
+                  <div className="w-full bg-muted rounded-full h-1.5 mt-2">
+                    <div
+                      className="h-1.5 rounded-full transition-all"
+                      style={{
+                        width: `${Math.min(progress, 100)}%`,
+                        backgroundColor: project.color,
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground text-right">
+                    {progress.toFixed(1)}% complete
+                  </p>
+                </div>
+              </Card>
+            )
+          })}
+
+          {/* Summary totals card */}
+          <Card className="p-6 bg-card border-border border-dashed flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Banknote className="text-primary" size={18} />
+              </div>
+              <p className="text-sm font-semibold text-muted-foreground">All Projects</p>
             </div>
-            <div className="p-3 bg-accent/10 rounded-lg">
-              <TrendingUp className="text-accent" size={24} />
+            <div className="space-y-3">
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs text-muted-foreground">Total Saved</span>
+                <span className="text-lg font-bold text-primary">
+                  KSh {formatCompactNumber(totalSaved)}
+                </span>
+              </div>
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs text-muted-foreground">Total Target</span>
+                <span className="text-lg font-bold text-foreground">
+                  KSh {formatCompactNumber(totalTarget)}
+                </span>
+              </div>
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs text-muted-foreground">Overall</span>
+                <span className="text-lg font-bold text-accent">
+                  {overallProgress.toFixed(0)}%
+                </span>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
+      )}
 
       {/* Projects Overview */}
       {projects.length === 0 ? (
