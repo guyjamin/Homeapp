@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useApp, type Project } from '@/lib/context'
+import { formatCompactNumber } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -225,7 +226,7 @@ export default function Projects() {
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Progress</span>
                         <span className="font-semibold text-foreground">
-                          KSh {(project.saved / 1000).toFixed(1)}k / KSh {(project.target / 1000).toFixed(0)}k
+                          KSh {formatCompactNumber(project.saved)} / KSh {formatCompactNumber(project.target)}
                         </span>
                       </div>
                       <div className="w-full bg-muted rounded-full h-2">

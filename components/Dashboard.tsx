@@ -2,6 +2,7 @@
 
 import { useApp } from '@/lib/context'
 import { Card } from '@/components/ui/card'
+import { formatCompactNumber, formatFullNumber } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 import {
   LineChart,
@@ -64,7 +65,7 @@ export default function Dashboard() {
             <div>
               <p className="text-sm text-muted-foreground mb-1">Total Saved</p>
               <p className="text-3xl font-bold text-primary">
-                KSh {(totalSaved / 1000).toFixed(1)}k
+                KSh {formatCompactNumber(totalSaved)}
               </p>
             </div>
             <div className="p-3 bg-primary/10 rounded-lg">
@@ -78,7 +79,7 @@ export default function Dashboard() {
             <div>
               <p className="text-sm text-muted-foreground mb-1">Total Target</p>
               <p className="text-3xl font-bold text-secondary">
-                KSh {(totalTarget / 1000).toFixed(1)}k
+                KSh {formatCompactNumber(totalTarget)}
               </p>
             </div>
             <div className="p-3 bg-secondary/10 rounded-lg">
@@ -117,11 +118,11 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-foreground text-lg">{project.name}</h3>
                     <span className="text-2xl font-bold text-primary">
-                      KSh {(project.saved / 1000).toFixed(1)}k
+                      KSh {formatCompactNumber(project.saved)}
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    of KSh {(project.target / 1000).toFixed(0)}k target
+                    of KSh {formatCompactNumber(project.target)} target
                   </p>
                 </div>
                 <Progress value={progress} className="h-2 mb-3" />
@@ -143,9 +144,7 @@ export default function Dashboard() {
             <XAxis dataKey="month" stroke="var(--color-muted-foreground)" />
             <YAxis
               stroke="var(--color-muted-foreground)"
-              tickFormatter={(v: number) =>
-                v >= 1000 ? `KSh ${(v / 1000).toFixed(0)}k` : `KSh ${v}`
-              }
+              tickFormatter={(v: number) => `KSh ${formatCompactNumber(v)}`}
             />
             <Tooltip
               contentStyle={{
@@ -153,7 +152,7 @@ export default function Dashboard() {
                 border: '1px solid var(--color-border)',
                 borderRadius: '8px',
               }}
-              formatter={(value: number) => [`KSh ${value.toLocaleString()}`, '']}
+              formatter={(value: number) => [`KSh ${formatFullNumber(value)}`, '']}
             />
             <Legend />
             {projects.map((p, i) => (

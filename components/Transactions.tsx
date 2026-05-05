@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useApp, type Transaction } from '@/lib/context'
+import { formatCompactNumber, formatFullNumber } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -200,19 +201,19 @@ export default function Transactions() {
         <Card className="p-5 bg-card border-border">
           <p className="text-sm text-muted-foreground mb-1">Total Deposited</p>
           <p className="text-2xl font-bold text-primary">
-            KSh {totalDeposits.toLocaleString()}
+            KSh {formatCompactNumber(totalDeposits)}
           </p>
         </Card>
         <Card className="p-5 bg-card border-border">
           <p className="text-sm text-muted-foreground mb-1">Total Withdrawn</p>
           <p className="text-2xl font-bold text-destructive">
-            KSh {totalWithdrawals.toLocaleString()}
+            KSh {formatCompactNumber(totalWithdrawals)}
           </p>
         </Card>
         <Card className="p-5 bg-card border-border">
           <p className="text-sm text-muted-foreground mb-1">Net Balance</p>
           <p className={`text-2xl font-bold ${netBalance >= 0 ? 'text-primary' : 'text-destructive'}`}>
-            KSh {netBalance.toLocaleString()}
+            KSh {formatCompactNumber(netBalance)}
           </p>
         </Card>
       </div>
@@ -270,7 +271,7 @@ export default function Transactions() {
                       }`}
                     >
                       {transaction.type === 'deposit' ? '+' : '-'}KSh{' '}
-                      {transaction.amount.toLocaleString()}
+                      {formatFullNumber(transaction.amount)}
                     </p>
                     <p className="text-xs text-muted-foreground capitalize">{transaction.type}</p>
                   </div>
